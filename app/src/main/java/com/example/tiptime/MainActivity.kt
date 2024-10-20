@@ -1,5 +1,4 @@
 package com.example.tiptime
-
 import androidx.annotation.StringRes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,6 +21,7 @@ import kotlin.math.ceil
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.annotation.DrawableRes
+import androidx.annotation.VisibleForTesting
 import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
 
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
 fun TipTimeLayout() {
     var amountInput by remember { mutableStateOf("") }
     var tipInput by remember { mutableStateOf("") }
-    var roundUp by remember { mutableStateOf(false) } // Ajout de l'état du bouton bascule
+    var roundUp by remember { mutableStateOf(false) }
 
     val amount = amountInput.toDoubleOrNull() ?: 0.0
     val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
@@ -104,9 +104,7 @@ fun TipTimeLayout() {
     }
 }
 
-/**
- * Composable pour entrer des nombres.
- */
+
 @Composable
 fun EditNumberField(
     @StringRes label: Int,
@@ -127,9 +125,7 @@ fun EditNumberField(
     )
 }
 
-/**
- * Composable pour le bouton bascule "Arrondir le montant du pourboire ?"
- */
+
 @Composable
 fun RoundTheTipRow(
     roundUp: Boolean,
@@ -153,11 +149,9 @@ fun RoundTheTipRow(
     }
 }
 
-/**
- * Fonction pour calculer le pourboire en fonction du montant et du pourcentage donnés
- * et pour arrondir si nécessaire.
- */
-private fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boolean): String {
+
+@VisibleForTesting
+internal fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boolean): String {
     var tip = tipPercent / 100 * amount
     if (roundUp) {
         tip = ceil(tip)
